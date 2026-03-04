@@ -23,9 +23,9 @@ export default function PersonCard({ person }: PersonCardProps) {
   };
 
   return (
-    <div
+    <button
       onClick={() => setMemberModalId(person.id)}
-      className={`group block relative bg-white/60 backdrop-blur-md p-2 sm:p-4 rounded-2xl shadow-sm border border-stone-200/60 hover:border-amber-300 hover:shadow-md hover:bg-white/90 transition-all duration-300 overflow-hidden
+      className={`group block relative bg-white/60 p-2 sm:p-4 rounded-2xl shadow-sm border border-stone-200/60 hover:border-amber-300 hover:shadow-md hover:bg-white/90 transition-all duration-300 overflow-hidden
         ${isDeceased ? "opacity-80 grayscale-[0.3]" : ""}`}
     >
       {/* Decorative gradient blob */}
@@ -65,12 +65,12 @@ export default function PersonCard({ person }: PersonCardProps) {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="text-base sm:text-lg font-bold text-stone-900 group-hover:text-amber-700 transition-colors truncate mb-1.5">
+          <h3 className="text-base text-left sm:text-lg font-bold text-stone-900 group-hover:text-amber-700 transition-colors truncate mb-1.5">
             {person.full_name}
           </h3>
           <p className="text-sm font-medium text-stone-500 truncate flex items-center gap-1.5">
             <svg
-              className="w-4 h-4 shrink-0 text-stone-400"
+              className="size-4 shrink-0 text-stone-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -92,7 +92,10 @@ export default function PersonCard({ person }: PersonCardProps) {
                 ` → ${formatDisplayDate(person.death_year, person.death_month, person.death_day)}`}
             </span>
           </p>
-          {(isDeceased || person.is_in_law) && (
+          {(isDeceased ||
+            person.is_in_law ||
+            person.birth_order != null ||
+            person.generation != null) && (
             <div className="flex flex-wrap items-center gap-1.5 shrink-0 mt-2">
               {isDeceased && (
                 <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-stone-100 text-stone-500 uppercase tracking-widest border border-stone-200/60 shadow-xs">
@@ -116,10 +119,22 @@ export default function PersonCard({ person }: PersonCardProps) {
                       : "Khách"}
                 </span>
               )}
+              {person.birth_order != null && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200/60 uppercase tracking-widest shadow-xs">
+                  {person.birth_order === 1
+                    ? "Con trưởng"
+                    : `Con thứ ${person.birth_order}`}
+                </span>
+              )}
+              {person.generation != null && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60 uppercase tracking-widest shadow-xs">
+                  Đời thứ {person.generation}
+                </span>
+              )}
             </div>
           )}
         </div>
       </div>
-    </div>
+    </button>
   );
 }
